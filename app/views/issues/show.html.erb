@@ -138,10 +138,10 @@ end %>
 
 <%= render partial: 'action_menu_edit' unless User.current.wants_comments_in_reverse_order? %>
 
-<% other_formats_links do |f| %>
-  <%= f.link_to 'Atom', :url => {:key => User.current.rss_key} %>
-  <%= f.link_to 'PDF' %>
-<% end %>
+<%# other_formats_links do |f| %>
+  <%#= f.link_to 'Atom', :url => {:key => User.current.rss_key} %>
+  <%#= f.link_to 'PDF' %>
+<%# end %>
 
 <% html_title "#{@issue.tracker.name} ##{@issue.id}: #{@issue.subject}" %>
 
@@ -150,9 +150,9 @@ end %>
 
   <% if User.current.allowed_to?(:add_issue_watchers, @project) ||
     (@issue.watchers.present? && User.current.allowed_to?(:view_issue_watchers, @project)) %>
-    <div id="watchers">
-      <%= render :partial => 'watchers/watchers', :locals => {:watched => @issue} %>
-    </div>
+    <!-- <div id="watchers">
+      <%#= render :partial => 'watchers/watchers', :locals => {:watched => @issue} %>
+    </div> -->
   <% end %>
 <% end %>
 
