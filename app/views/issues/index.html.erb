@@ -21,9 +21,9 @@
 <% end %>
 
 <% other_formats_links do |f| %>
-  <%= f.link_to_with_query_parameters 'Atom', :key => User.current.rss_key %>
+  <%#= f.link_to_with_query_parameters 'Atom', :key => User.current.rss_key %>
   <%= f.link_to_with_query_parameters 'CSV', {}, :onclick => "showModal('csv-export-options', '350px'); return false;" %>
-  <%= f.link_to_with_query_parameters 'PDF' %>
+  <%#= f.link_to_with_query_parameters 'PDF' %>
 <% end %>
 
 <div id="csv-export-options" style="display:none;">
