@@ -20,7 +20,7 @@ class IssuesController < ApplicationController
 
   before_action :find_issue, :only => [:show, :edit, :update]
   before_action :find_issues, :only => [:bulk_edit, :bulk_update, :destroy]
-  before_action :authorize, :except => [:index, :new, :create]
+  before_action :authorize, :except => [:index, :new, :create,:find_issue_for_sn]
   before_action :find_optional_project, :only => [:index, :new, :create]
   before_action :build_new_issue_from_params, :only => [:new, :create]
   accept_rss_auth :index, :show
@@ -111,6 +111,37 @@ class IssuesController < ApplicationController
       format.pdf  {
         send_file_headers! :type => 'application/pdf', :filename => "#{@project.identifier}-#{@issue.id}.pdf"
       }
+    end
+  end
+
+  def find_issue_for_sn
+    @issue = Issue.find_by(id:CustomValue.find_by(customized_type: "Issue",custom_field_id: 1,
+                        value:params[:sn]).try(:customized_id))
+    if @issue.present?
+      @journals = @issue.visible_journals_with_index
+      @changesets = @issue.changesets.visible.preload(:repository, :user).to_a
+      @relations = @issue.relations.select {|r| r.other_issue(@issue) && r.other_issue(@issue).visible? }
+      render :template => 'issues/show.api.rsb'
+    else
+      render :json => {'code' => 1, 'result' => '该SN号没有找到对应的资产信息'}
+    end
+  end
+
+  def update_place
+    CustomValue.transaction do
+      issue = Issue.find_by(id:params[:issue_id])
+      issue.assigned_to_id = params[:user_id]
+      cv1 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:10)
+      cv1.value = params[:province]
+      cv2 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:23)
+      cv2.value = params[:department]
+      if issue.save && cv1.save && cv2.save
+        render :json => {'code' => 0}
+      else
+        raise ActiveRecord::Rollback
+        render :json => {'code' => 1}
+      end
+     
     end
   end
 

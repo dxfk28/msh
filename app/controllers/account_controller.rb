@@ -14,7 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
+# require "net/https"  
+# require "uri" 
 class AccountController < ApplicationController
   helper :custom_fields
   include CustomFieldsHelper
@@ -23,6 +24,7 @@ class AccountController < ApplicationController
 
   # prevents login action to be filtered by check_if_login_required application scope filter
   skip_before_action :check_if_login_required, :check_password_change
+  skip_before_action :verify_authenticity_token, :only => [:create_user]
 
   # Overrides ApplicationController#verify_authenticity_token to disable
   # token verification on openid callbacks
@@ -30,6 +32,44 @@ class AccountController < ApplicationController
     unless using_open_id?
       super
     end
+  end
+
+  def check_openid
+    code = params[:code]
+    appid = params[:appid]
+    secret = params[:secret]
+    uri = URI.parse("https://api.weixin.qq.com/sns/jscode2session?appid=#{appid}&secret=#{secret}&js_code=#{code}&grant_type=authorization_code")
+    response = Net::HTTP.get_response(uri)
+    result = JSON.parse response.body
+    if result['openid'].present?
+      if CustomValue.find_by(customized_type: "Principal",custom_field_id:20,value:result["openid"]).present?
+        render :json => {"code" => 0 } and return
+      else
+        render :json => {"code" => 1, "openid" => result['openid']} and return
+      end
+    else
+      render :json => {"code" => 2 } and return
+    end
+  end
+
+  def create_user
+    params[:user][:custom_field_values] = {'19'=>params[:user][:custom_field_values][:weChatID], "20"=>params[:user][:custom_field_values][:openid]}
+    user = User.new(:language => Setting.default_language, :mail_notification => Setting.default_notification_option, :admin => false)
+    user.safe_attributes = params[:user]
+    user.password, user.password_confirmation = params[:user][:password], params[:user][:password_confirmation] unless user.auth_source_id
+    user.pref.safe_attributes = params[:pref]
+    user.status = 2
+    begin
+      if user.save
+        render :json => {"code" => 0 } and return
+      else
+        messages = Array.wrap([user]).map {|object| object.errors.full_messages}.flatten
+        render :json => {"code" => 1 ,'result' => messages} and return
+      end
+    rescue Exception => e
+      render :json => {"code" => 2, 'result' => e.messages} and return
+    end
+      
   end
 
   # Login request and validation

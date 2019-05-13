@@ -24,6 +24,8 @@ Rails.application.routes.draw do
   match 'account/lost_password', :to => 'account#lost_password', :via => [:get, :post], :as => 'lost_password'
   match 'account/activate', :to => 'account#activate', :via => :get
   get 'account/activation_email', :to => 'account#activation_email', :as => 'activation_email'
+  get 'account/check_openid', :to => 'account#check_openid', :as => 'check_openid'
+  post 'account/create_user', :to => 'account#create_user', :as => 'create_user'
 
   match '/news/preview', :controller => 'previews', :action => 'news', :as => 'preview_news', :via => [:get, :post, :put, :patch]
   match '/issues/preview', :to => 'previews#issue', :as => 'preview_issue', :via => [:get, :post, :put, :patch]
@@ -85,6 +87,9 @@ Rails.application.routes.draw do
   resources :users do
     resources :memberships, :controller => 'principal_memberships'
     resources :email_addresses, :only => [:index, :create, :update, :destroy]
+    collection do
+      get 'find_area_user'
+    end
   end
 
   post 'watchers/watch', :to => 'watchers#watch', :as => 'watch'
@@ -188,6 +193,8 @@ Rails.application.routes.draw do
     collection do
       match 'bulk_edit', :via => [:get, :post]
       post 'bulk_update'
+      get 'find_issue_for_sn'
+      post 'update_place'
     end
     resources :time_entries, :controller => 'timelog', :only => [:new, :create]
     shallow do
@@ -347,6 +354,7 @@ Rails.application.routes.draw do
   match 'uploads', :to => 'attachments#upload', :via => :post
 
   get 'robots', :to => 'welcome#robots'
+  get 'msh', :to => 'welcome#msh'
 
   Dir.glob File.expand_path("#{Redmine::Plugin.directory}/*") do |plugin_dir|
     file = File.join(plugin_dir, "config/routes.rb")
