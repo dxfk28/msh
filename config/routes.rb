@@ -89,6 +89,7 @@ Rails.application.routes.draw do
     resources :email_addresses, :only => [:index, :create, :update, :destroy]
     collection do
       get 'find_area_user'
+      get 'find_user_for_openid'
     end
   end
 

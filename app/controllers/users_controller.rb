@@ -23,7 +23,7 @@ class UsersController < ApplicationController
   before_action ->{ find_user(false) }, :only => :show
   before_action :find_user, :only => [:edit, :update, :destroy]
   accept_api_auth :index, :show, :create, :update, :destroy
-  skip_before_action :require_admin, :only => [:find_area_user]
+  skip_before_action :require_admin, :only => [:find_area_user,:find_user_for_openid]
 
   helper :sort
   include SortHelper
@@ -77,6 +77,17 @@ class UsersController < ApplicationController
         send_data(users_to_csv(scope.order(sort_clause)), :type => 'text/csv; header=present', :filename => 'users.csv')
       }
       format.api
+    end
+  end
+
+    def find_user_for_openid 
+    @user = User.find_by(id:CustomValue.find_by(customized_type: "Principal",custom_field_id: 20,
+                        value:params[:openid]).try(:customized_id))
+    if @user.present?
+      @memberships = @user.memberships.preload(:roles, :project).where(Project.visible_condition(User.current)).to_a
+      render :template => 'users/show.api.rsb'
+    else
+      render :json => {'code' => 1, 'result' => '该openid号没有找到对应的用户信息'}
     end
   end
 
