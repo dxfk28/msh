@@ -24,7 +24,7 @@ class AccountController < ApplicationController
 
   # prevents login action to be filtered by check_if_login_required application scope filter
   skip_before_action :check_if_login_required, :check_password_change
-  skip_before_action :verify_authenticity_token, :only => [:create_user]
+  skip_before_action :verify_authenticity_token, :only => [:create_user,:create_user_for_pc]
 
   # Overrides ApplicationController#verify_authenticity_token to disable
   # token verification on openid callbacks
