@@ -46,6 +46,18 @@ class UsersController < ApplicationController
     end
   end
 
+  def change_user_information
+    openid = params[:openid]
+    mail = params[:mail]
+    user = User.find_by(openid:openid)
+    user.mail = mail
+    if user.save
+      render :json => {'code' => 0}
+    else
+      render :json => {'code' => 1}
+    end
+  end
+
   def index
     sort_init 'login', 'asc'
     sort_update %w(login firstname lastname admin created_on last_login_on)

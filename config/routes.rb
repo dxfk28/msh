@@ -90,6 +90,7 @@ Rails.application.routes.draw do
     collection do
       get 'find_area_user'
       get 'find_user_for_openid'
+      post 'change_user_information'
     end
   end
 
