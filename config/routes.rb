@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   match 'account/activate', :to => 'account#activate', :via => :get
   get 'account/activation_email', :to => 'account#activation_email', :as => 'activation_email'
   get 'account/check_openid', :to => 'account#check_openid', :as => 'check_openid'
+  post 'account/create_user_for_pc', :to => 'account#create_user_for_pc', :as => 'create_user_for_pc'
   post 'account/create_user', :to => 'account#create_user', :as => 'create_user'
 
   match '/news/preview', :controller => 'previews', :action => 'news', :as => 'preview_news', :via => [:get, :post, :put, :patch]

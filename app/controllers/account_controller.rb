@@ -69,7 +69,21 @@ class AccountController < ApplicationController
     rescue Exception => e
       render :json => {"code" => 2, 'result' => e.messages} and return
     end
-      
+  end
+
+  def create_user_for_pc
+    user = User.try_to_login(params[:username], params[:password], false)
+    if user.present?
+      cv = CustomValue.find_or_create_by(customized_type:"Principal", customized_id:user.id,custom_field_id:20)
+      cv.value = params[:openid]
+      if cv.save
+        render :json => {"code" => 0 } and return
+      else
+        render :json => {"code" => 1 } and return
+      end
+    else
+      render :json => {"code" => 2,'result' => '用户名或密码不正确' } and return
+    end
   end
 
   # Login request and validation
