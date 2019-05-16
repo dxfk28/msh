@@ -23,7 +23,8 @@ class UsersController < ApplicationController
   before_action ->{ find_user(false) }, :only => :show
   before_action :find_user, :only => [:edit, :update, :destroy]
   accept_api_auth :index, :show, :create, :update, :destroy
-  skip_before_action :require_admin, :only => [:find_area_user,:find_user_for_openid]
+  skip_before_action :require_admin, :only => [:find_area_user,:find_user_for_openid,:change_user_information]
+  skip_before_action :verify_authenticity_token, :only => [:change_user_information]
 
   helper :sort
   include SortHelper
@@ -49,12 +50,17 @@ class UsersController < ApplicationController
   def change_user_information
     openid = params[:openid]
     mail = params[:mail]
-    user = User.find_by(openid:openid)
-    user.mail = mail
-    if user.save
-      render :json => {'code' => 0}
+    user_id = CustomValue.find_by(customized_type:"Principal",value:openid,custom_field_id:20).try(:customized_id) 
+    user = User.find_by(id:user_id)
+    if user.present?
+      user.mail = mail
+      if user.save
+        render :json => {'code' => 0}
+      else
+        render :json => {'code' => 1}
+      end
     else
-      render :json => {'code' => 1}
+      render :json => {'code' => 2, 'result' => '未查到用户'}
     end
   end
 
