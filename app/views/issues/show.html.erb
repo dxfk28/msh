@@ -106,35 +106,37 @@ end %>
     width: 100%;
   }
 </style>
-<p><strong><%='位置变更记录'%></strong></p>
-<table class="record">
-  <thead>
-    <tr>
-      <th style="width: 10%;text-align: left;">变更时间</th>
-      <th style="width: 10%;text-align: left;">变更者</th>
-      <th style="width: 23%;text-align: left;">变更前地址</th>
-      <th style="width: 23%;text-align: left;">变更后地址</th>
-      <th style="width: 10%;text-align: left;">大区</th>
-      <th style="width: 7%;text-align: left;">省</th>
-      <th style="width: 7%;text-align: left;">市</th>
-      <th style="width: 10%;text-align: left;">科室</th>
-    </tr>
-  </thead>
-  <tbody>
-<% for place_record in @issue.place_records.order("created_at desc") -%>
-  <tr>
-    <td style="width: 10%;text-align: left;"><%= place_record.created_at.to_date%></td>
-    <td style="width: 10%;text-align: left;"><%= place_record.user.try(:lastname)%></td>
-    <td style="width: 23%;text-align: left;"><%= place_record.form%></td>
-    <td style="width: 23%;text-align: left;"><%= place_record.to%></td>
-    <td style="width: 10%;text-align: left;"><%= place_record.area%></td>
-    <td style="width: 7%;text-align: left;"><%= place_record.province%></td>
-    <td style="width: 7%;text-align: left;"><%= place_record.city%></td>
-    <td style="width: 10%;text-align: left;"><%= place_record.department%></td>
-  </tr>
-<% end -%>
-  </tbody>
-</table>
+<% if  @issue.place_records.present? %>
+    <p><strong><%='位置变更记录'%></strong><span style="float: right;">当月流转率:<% count = @issue.place_records.where("created_at > ? and created_at < ?",Time.now.beginning_of_month,Time.now.end_of_month).count%><%= format("%.2f",count/Setting[:turnover_base].to_f*100) + '%' %></span></p>
+    <table class="record">
+      <thead>
+        <tr>
+          <th style="width: 10%;text-align: left;">变更时间</th>
+          <th style="width: 10%;text-align: left;">变更者</th>
+          <th style="width: 23%;text-align: left;">变更前地址</th>
+          <th style="width: 23%;text-align: left;">变更后地址</th>
+          <th style="width: 10%;text-align: left;">大区</th>
+          <th style="width: 7%;text-align: left;">省</th>
+          <th style="width: 7%;text-align: left;">市</th>
+          <th style="width: 10%;text-align: left;">科室</th>
+        </tr>
+      </thead>
+      <tbody>
+    <% for place_record in @issue.place_records.order("created_at desc") -%>
+      <tr>
+        <td style="width: 10%;text-align: left;"><%= place_record.created_at.to_date%></td>
+        <td style="width: 10%;text-align: left;"><%= place_record.user.try(:lastname)%></td>
+        <td style="width: 23%;text-align: left;"><%= place_record.form%></td>
+        <td style="width: 23%;text-align: left;"><%= place_record.to%></td>
+        <td style="width: 10%;text-align: left;"><%= place_record.area%></td>
+        <td style="width: 7%;text-align: left;"><%= place_record.province%></td>
+        <td style="width: 7%;text-align: left;"><%= place_record.city%></td>
+        <td style="width: 10%;text-align: left;"><%= place_record.department%></td>
+      </tr>
+    <% end -%>
+      </tbody>
+    </table>
+<% end %>
 </div>
 <% end %>
 

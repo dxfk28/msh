@@ -131,15 +131,15 @@ class IssuesController < ApplicationController
   def update_place
     CustomValue.transaction do
       issue = Issue.find_by(id:params[:issue_id])
-      issue.assigned_to_id = params[:user_id]
-      cv1 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:10)
+      user = User.find_by(id:params[:usuer_id])
+      cv1 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:28)
       cv1.value = params[:province] if params[:province].present?
       cv2 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:23)
       cv2.value = params[:department] if params[:department].present?
       cv3 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:17)
-      cv3.value = params[:to] if params[:department].present?
-      cv4 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:10)
-      cv4.value = params[:province] if params[:department].present?
+      cv3.value = params[:to] if params[:to].present?
+      cv4 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:26)
+      cv4.value = user.try(:lastname) if user.present?
       place_record = PlaceRecord.new()
       place_record.user_id = params[:user_id]
       place_record.issue_id = issue.id
@@ -150,7 +150,7 @@ class IssuesController < ApplicationController
       place_record.department = params[:department]
       group_id = CustomValue.find_by(customized_type:'Principal',custom_field_id:24,value:params[:province]).try(:customized_id)
       place_record.area = Group.find_by(id:group_id).try(:lastname)
-      if issue.save && cv1.save && cv2.save && place_record.save && cv3.save
+      if cv1.save && cv2.save && place_record.save && cv3.save && cv4.save
         render :json => {'code' => 0}
       else
         raise ActiveRecord::Rollback
