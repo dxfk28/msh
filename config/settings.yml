@@ -102,6 +102,9 @@ protocol:
 feeds_limit:
   format: int
   default: 15
+turnover_base:
+  format: int
+  default: 4
 gantt_items_limit:
   format: int
   default: 500

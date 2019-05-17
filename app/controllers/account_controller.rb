@@ -53,7 +53,7 @@ class AccountController < ApplicationController
   end
 
   def create_user
-    params[:user][:custom_field_values] = {'19'=>params[:user][:custom_field_values][:weChatID], "20"=>params[:user][:custom_field_values][:openid]}
+    params[:user][:custom_field_values] = {"20"=>params[:user][:custom_field_values][:openid]}
     user = User.new(:language => Setting.default_language, :mail_notification => Setting.default_notification_option, :admin => false)
     user.safe_attributes = params[:user]
     user.password, user.password_confirmation = params[:user][:password], params[:user][:password_confirmation] unless user.auth_source_id
