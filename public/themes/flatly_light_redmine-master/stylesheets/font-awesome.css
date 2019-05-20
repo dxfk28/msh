@@ -213,11 +213,11 @@ a.icon{
 .fa-heart:before {
   content: "\f004";
 }
-.fa-star:before, .icon-fav:before {
+/*.fa-star:before, .icon-fav:before {
   color: #FEC44F;
   content: "\f005";
   ;
-}
+}*/
 .fa-star-o:before, .icon-fav-off:before {
   content: "\f006";
 }
@@ -236,11 +236,11 @@ a.icon{
 .fa-th-list:before {
   content: "\f00b";
 }
-.fa-check:before, form .icon-checked:before {
+/*.fa-check:before, form .icon-checked:before {
   content: "\f00c";
   color: #23d2c5;
 
-}
+}*/
 .fa-remove:before,
 .fa-close:before,
 .fa-times:before {
@@ -299,9 +299,9 @@ a.icon{
 .fa-repeat:before {
   content: "\f01e";
 }
-.fa-refresh:before, .icon-reload:before {
+/*.fa-refresh:before, .icon-reload:before {
   content: "\f021";
-}
+}*/
 .fa-list-alt:before {
   content: "\f022";
 }
@@ -394,9 +394,9 @@ a.icon{
   content: "\f03e";
 }
 .fa-pencil:before,
-.icon-edit:before {
+/*.icon-edit:before {
   content: "\f040";
-}
+}*/
 .fa-map-marker:before {
   content: "\f041";
 }
@@ -455,9 +455,9 @@ a.icon{
 .fa-chevron-right:before {
   content: "\f054";
 }
-.fa-plus-circle:before, a.icon-add:before {
+/*.fa-plus-circle:before, a.icon-add:before {
   content: "\f055";
-}
+}*/
 .fa-minus-circle:before {
   content: "\f056";
 }
@@ -751,18 +751,18 @@ a.icon{
 }
 .fa-copy:before,
 .fa-files-o:before,
-.icon-copy:before {
+/*.icon-copy:before {
   content: "\f0c5";
-}
+}*/
 .fa-paperclip:before {
   content: "\f0c6";
 }
 .fa-save:before,
 .fa-floppy-o:before,
-.icon-save:before {
+/*.icon-save:before {
   content: "\f0c7";
   color: #1ea1f7;
-}
+}*/
 .fa-square:before {
   content: "\f0c8";
 }
@@ -2064,12 +2064,12 @@ a.icon{
 .fa-fonticons:before {
   content: "\f280";
 }
-.icon-add:before {
+/*.icon-add:before {
   content: "\f055";
-}
-.icon-del:before{
+}*/
+/*.icon-del:before{
   content: "\f014";
-}
+}*/
 .icon-del{
   cursor: pointer;
 }

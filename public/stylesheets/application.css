@@ -26,7 +26,7 @@ pre, code {font-family: Consolas, Menlo, "Liberation Mono", Courier, monospace;}
 
 #account {float:right;}
 
-#header {min-height:5.3em;margin:0;background-color:#628DB6;color:#f8f8f8; padding: 4px 8px 20px 6px; position:relative;}
+#header {margin:0;background-color:#628DB6;color:#f8f8f8; padding: 4px 8px 0px 6px; position:relative;}
 #header a {color:#f8f8f8;}
 #header h1 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 #header h1 .breadcrumbs { display:block; font-size: .5em; font-weight: normal; }
@@ -1317,6 +1317,7 @@ div.wiki img {vertical-align:middle; max-width:100%;}
 .icon-error { background-image: url(../images/exclamation.png); }
 .icon-fav  { background-image: url(../images/fav.png); }
 .icon-fav-off  { background-image: url(../images/fav_off.png); }
+.icon-reload  { background-image: url(../images/reload.png); }
 .icon-reload  { background-image: url(../images/reload.png); }
 .icon-lock, .icon-locked  { background-image: url(../images/locked.png); }
 .icon-unlock  { background-image: url(../images/unlock.png); }
