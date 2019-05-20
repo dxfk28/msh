@@ -101,14 +101,9 @@ end %>
 <% if !@issue.leaf? || User.current.allowed_to?(:manage_subtasks, @project) %>
 <hr />
 <div id="issue_tree">
-<style type="text/css">
-  .record{
-    width: 100%;
-  }
-</style>
 <% if  @issue.place_records.present? %>
     <p><strong><%='位置变更记录'%></strong><span style="float: right;">当月流转率:<% count = @issue.place_records.where("created_at > ? and created_at < ?",Time.now.beginning_of_month,Time.now.end_of_month).count%><%= format("%.2f",count/Setting[:turnover_base].to_f*100) + '%' %></span></p>
-    <table class="record">
+    <table style="width: 100%;">
       <thead>
         <tr>
           <th style="width: 10%;text-align: left;">变更时间</th>
@@ -139,7 +134,11 @@ end %>
 <% end %>
 </div>
 <% end %>
-
+<hr />
+<p><strong><%='设备信息二维码'%></strong></p>
+<% qr = RQRCode::QRCode.new( @issue.subject, :size => 4, :level => :h ) %>
+<% @qrcode_str = Base64.encode64( qr.to_img.resize(400,400).to_s ) %>
+<img src="data:image/png;base64,<%= @qrcode_str -%>" style='width: 80px;' />
 <% if @relations.present? || User.current.allowed_to?(:manage_issue_relations, @project) %>
 <hr />
 <% end %>

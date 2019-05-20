@@ -20,7 +20,7 @@ class IssuesController < ApplicationController
 
   before_action :find_issue, :only => [:show, :edit, :update]
   before_action :find_issues, :only => [:bulk_edit, :bulk_update, :destroy]
-  before_action :authorize, :except => [:index, :new, :create,:find_issue_for_sn,:update_place]
+  before_action :authorize, :except => [:index, :new, :create,:find_issue_for_sn,:update_place,:yue_biao]
   before_action :find_optional_project, :only => [:index, :new, :create]
   before_action :build_new_issue_from_params, :only => [:new, :create]
   accept_rss_auth :index, :show
@@ -131,15 +131,14 @@ class IssuesController < ApplicationController
   def update_place
     CustomValue.transaction do
       issue = Issue.find_by(id:params[:issue_id])
-      user = User.find_by(id:params[:usuer_id])
       cv1 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:28)
       cv1.value = params[:province] if params[:province].present?
       cv2 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:23)
       cv2.value = params[:department] if params[:department].present?
       cv3 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:17)
       cv3.value = params[:to] if params[:to].present?
-      cv4 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:26)
-      cv4.value = user.try(:lastname) if user.present?
+      cv4 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:30)
+      cv4.value = params[:usuer_id] if params[:usuer_id].present?
       place_record = PlaceRecord.new()
       place_record.user_id = params[:user_id]
       place_record.issue_id = issue.id

@@ -31,4 +31,20 @@ class WelcomeController < ApplicationController
   	# render :layout => false
   end
 
+  def yue_biao
+    @issue = Issue.find_by(id:params[:issue_id])
+    @time = Time.now().strftime("%Y")
+    @year = Time.now().year
+    @yue = [1,2,3,4,5,6,7,8,9,10,11,12]
+    @ke = ["麻醉科","疼痛科","手术室","康复科","骨科","风湿科","超声科","体检科","干部病房",
+      "急诊科","ICU","重症病房","甲乳科","泌尿科","介入科","肿瘤科","神经内科","神经外科","肝胆外科","妇产科","胰腺科",
+      "呼吸科","消化科","血管外科","透析科","儿科","心内科","心外科","内分泌科","普外科","中医科"]
+    @count = []
+    @yue.each do |yue|
+      # binding.pry
+      count = @issue.place_records.where("created_at > ? and created_at < ?",Time.new.(@year,yue,1),Time.new.(@year,yue,31)).count
+      @count << count
+    end
+  end
+
 end

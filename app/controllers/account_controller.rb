@@ -43,7 +43,7 @@ class AccountController < ApplicationController
     result = JSON.parse response.body
     if result['openid'].present?
       if CustomValue.find_by(customized_type: "Principal",custom_field_id:20,value:result["openid"]).present?
-        render :json => {"code" => 0 } and return
+        render :json => {"code" => 0, "openid" => result['openid'] } and return
       else
         render :json => {"code" => 1, "openid" => result['openid']} and return
       end

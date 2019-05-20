@@ -358,6 +358,7 @@ Rails.application.routes.draw do
 
   get 'robots', :to => 'welcome#robots'
   get 'msh', :to => 'welcome#msh'
+  get 'yue_biao', :to => 'welcome#yue_biao'
 
   Dir.glob File.expand_path("#{Redmine::Plugin.directory}/*") do |plugin_dir|
     file = File.join(plugin_dir, "config/routes.rb")

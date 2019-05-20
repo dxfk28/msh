@@ -25,6 +25,7 @@ gem "binding_of_caller", "~> 0.7.2"
 gem 'pry-byebug'
 gem 'spreadsheet', '1.1.2'
 gem 'aescrypt'
+gem 'rqrcode_png'
 # Optional gem for LDAP authentication
 group :ldap do
   gem "net-ldap", "~> 0.16.0"
