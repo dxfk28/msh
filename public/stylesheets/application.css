@@ -1318,6 +1318,7 @@ div.wiki img {vertical-align:middle; max-width:100%;}
 .icon-fav  { background-image: url(../images/fav.png); }
 .icon-fav-off  { background-image: url(../images/fav_off.png); }
 .icon-reload  { background-image: url(../images/reload.png); }
+.icon-reload  { background-image: url(../images/reload.png); }
 .icon-lock, .icon-locked  { background-image: url(../images/locked.png); }
 .icon-unlock  { background-image: url(../images/unlock.png); }
 .icon-checked  { background-image: url(../images/toggle_check.png); }
