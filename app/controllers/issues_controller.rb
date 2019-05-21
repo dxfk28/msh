@@ -140,7 +140,7 @@ class IssuesController < ApplicationController
       cv3 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:17)
       cv3.value = params[:to] if params[:to].present?
       cv4 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:30)
-      cv4.value = params[:usuer_id] if params[:usuer_id].present?
+      cv4.value = params[:user_id] if params[:user_id].present?
       place_record = PlaceRecord.new()
       place_record.user_id = params[:user_id]
       place_record.issue_id = issue.id
@@ -151,7 +151,7 @@ class IssuesController < ApplicationController
       place_record.department = params[:department]
       group_id = CustomValue.find_by(customized_type:'Principal',custom_field_id:24,value:params[:province]).try(:customized_id)
       place_record.area = Group.find_by(id:group_id).try(:lastname)
-      if cv1.save && cv2.save && place_record.save && cv3.save && cv4.save
+      if cv1.save && cv2.save && place_record.save && cv3.save && cv4.save && cv5.save
         render :json => {'code' => 0}
       else
         raise ActiveRecord::Rollback
