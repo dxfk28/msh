@@ -42,9 +42,19 @@ class WelcomeController < ApplicationController
     @count = []
     @yue.each do |yue|
       # binding.pry
-      count = @issue.place_records.where("created_at > ? and created_at < ?",Time.new.(@year,yue,1),Time.new.(@year,yue,31)).count
+      count = @issue.place_records.where("created_at > ? and created_at < ?",Time.new(@year,yue,1),Time.new(@year,yue,31)).count
+      # binding.pry
+      # count = format("%.2f",count/Setting[:turnover_base].to_f*100) 
+      count = count/Setting[:turnover_base].to_f*100
+      # @count << helper.number_to_percentage(count/Setting[:turnover_base].to_f, precision: 2).to_f
       @count << count
     end
+  end
+
+  def helper
+    @helper ||= Class.new do
+      include ActionView::Helpers::NumberHelper
+    end.new
   end
 
 end

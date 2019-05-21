@@ -134,7 +134,9 @@ class IssuesController < ApplicationController
       cv1 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:28)
       cv1.value = params[:province] if params[:province].present?
       cv2 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:23)
-      cv2.value = params[:department] if params[:department].present?
+      cv2.value = params[:lei] if params[:lei].present?
+      cv5 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:29)
+      cv5.value = params[:department] if params[:department].present?
       cv3 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:17)
       cv3.value = params[:to] if params[:to].present?
       cv4 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:30)
