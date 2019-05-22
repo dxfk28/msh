@@ -44,7 +44,7 @@ class IssueQuery < Query
     QueryColumn.new(:created_on, :sortable => "#{Issue.table_name}.created_on", :default_order => 'desc'),
     QueryColumn.new(:closed_on, :sortable => "#{Issue.table_name}.closed_on", :default_order => 'desc'),
     QueryColumn.new(:last_updated_by, :sortable => lambda {User.fields_for_order_statement("last_journal_user")}),
-    QueryColumn.new(:relations, :caption => :label_related_issues),
+    # QueryColumn.new(:relations, :caption => :label_related_issues),
     QueryColumn.new(:attachments, :caption => :label_attachment_plural),
     QueryColumn.new(:description, :inline => false),
     QueryColumn.new(:last_notes, :caption => :label_last_notes, :inline => false)
