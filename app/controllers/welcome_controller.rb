@@ -27,28 +27,112 @@ class WelcomeController < ApplicationController
     render :layout => false, :content_type => 'text/plain'
   end
 
+  def region
+    @year = Time.now().year
+    @yue = Time.now().month
+    @count = []
+    place_records = PlaceRecord.where("created_at > ? and created_at < ? ",Time.new(@year,@yue,1),Time.new(@year,@yue,31))
+    all_count = place_records.count
+    @users = User.where(id:Issue.pluck(:assigned_to_id).uniq).order("lastname desc")
+    @users.each do |user|
+      count = place_records.joins(:issue).where(issues: { assigned_to_id: user.id}).count
+      count = count/all_count.to_f*100
+      count = format("%.2f",count).to_f
+      @count << count
+    end
+  end
+
+  def region_html
+    if params[:time].present?
+      @year = params[:time].split("-")[0]
+      @yue = params[:time].split("-")[1]
+    else
+      @year = Time.now().year
+      @yue = Time.now().month
+    end
+    
+    @count = []
+    place_records = PlaceRecord.where("created_at > ? and created_at < ? ",Time.new(@year,@yue,1),Time.new(@year,@yue,31))
+    all_count = place_records.count
+    @users = User.where(id:Issue.pluck(:assigned_to_id).uniq).order("lastname desc")
+    @users.each do |user|
+      count = place_records.joins(:issue).where(issues: { assigned_to_id: user.id}).count
+      count = count/all_count.to_f*100
+      count = format("%.2f",count).to_f
+      @count << count
+    end
+    render :partial => 'region', :layout => false
+  end
+
   def msh
-  	# render :layout => false
+    @time = Time.now().to_date.to_s if params[:time].blank?
+    @year = Time.now().year
+    @yue = Time.now().month
+    @ke = CustomField.find_by(id:29).possible_values.delete_if { |item| item=="-" }
+    @count = []
+    if params[:province].blank?
+      @province = "辽宁省"
+    else
+      @province = params[:province]
+    end
+    all_count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department in (?) ",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,@ke).count
+    @ke.each do |ke|
+      count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department = ?",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,ke).count
+      count = count/all_count.to_f*100
+      count = format("%.2f",count).to_f
+      @count << count
+    end
+  end
+
+  def msh_html
+    if params[:time].present?
+      @year = params[:time].split("-")[0]
+      @yue = params[:time].split("-")[1]
+    else
+      @year = Time.now().year
+      @yue = Time.now().month
+      @time = Time.now().to_date.to_s
+    end
+    
+    @ke = CustomField.find_by(id:29).possible_values.delete_if { |item| item=="-" }
+    @count = []
+    if params[:province].blank?
+      @province = "辽宁省"
+    else
+      @province = params[:province]
+    end
+    all_count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department in (?) ",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,@ke).count
+    @ke.each do |ke|
+      count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department = ?",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,ke).count
+      count = count/all_count.to_f*100
+      count = format("%.2f",count).to_f
+      @count << count
+    end
+    render :partial => 'ke', :layout => false
   end
 
   def yue_biao
     @issue = Issue.find_by(id:params[:issue_id])
-    @time = Time.now().strftime("%Y")
     @year = Time.now().year
     @yue = [1,2,3,4,5,6,7,8,9,10,11,12]
-    @ke = ["麻醉科","疼痛科","手术室","康复科","骨科","风湿科","超声科","体检科","干部病房",
-      "急诊科","ICU","重症病房","甲乳科","泌尿科","介入科","肿瘤科","神经内科","神经外科","肝胆外科","妇产科","胰腺科",
-      "呼吸科","消化科","血管外科","透析科","儿科","心内科","心外科","内分泌科","普外科","中医科"]
     @count = []
     @yue.each do |yue|
-      # binding.pry
       count = @issue.place_records.where("created_at > ? and created_at < ?",Time.new(@year,yue,1),Time.new(@year,yue,31)).count
-      # binding.pry
-      # count = format("%.2f",count/Setting[:turnover_base].to_f*100) 
-      count = count/Setting[:turnover_base].to_f*100
-      # @count << helper.number_to_percentage(count/Setting[:turnover_base].to_f, precision: 2).to_f
+      count = format("%.2f",count/Setting[:turnover_base].to_f*100).to_f
       @count << count
     end
+  end
+  def yue_biao_html
+    @issue = Issue.find_by(id:params[:issue_id])
+    @year = params[:year].present? ? params[:year] : Time.now().year
+    @yue = [1,2,3,4,5,6,7,8,9,10,11,12]
+    @count = []
+    @yue.each do |yue|
+      count = @issue.place_records.where("created_at > ? and created_at < ?",Time.new(@year,yue,1),Time.new(@year,yue,31)).count
+      count = format("%.2f",count/Setting[:turnover_base].to_f*100).to_f
+      @count << count
+    end
+    render :partial => 'yue_biao_2', :layout => false
   end
 
   def helper

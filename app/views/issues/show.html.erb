@@ -102,8 +102,8 @@ end %>
 <hr />
 <div id="issue_tree">
 <% if  @issue.place_records.present? %>
-    <p><strong><%='位置变更记录'%></strong><span style="float: right;">当月流转率:<% count = @issue.place_records.where("created_at > ? and created_at < ?",Time.now.beginning_of_month,Time.now.end_of_month).count%><%= format("%.2f",count/Setting[:turnover_base].to_f*100) + '%' %></span></p>
-    <table style="width: 100%;">
+    <p><strong style="color: blue;" class="show" title="点击查看具体内容" ><%='位置变更记录'%></strong><span style="float: right;">当月流转率:<% count = @issue.place_records.where("created_at > ? and created_at < ?",Time.now.beginning_of_month,Time.now.end_of_month).count%><%= format("%.2f",count/Setting[:turnover_base].to_f*100) + '%' %></span></p>
+    <table style="width: 100%; display: none;" class="lvli">
       <thead>
         <tr>
           <th style="width: 10%;text-align: left;">变更时间</th>
@@ -186,3 +186,8 @@ end %>
 <% end %>
 
 <%= context_menu %>
+<script type="text/javascript">
+  $(".show").on("click",function (argument) {
+    $(".lvli").toggle();
+  })
+</script>

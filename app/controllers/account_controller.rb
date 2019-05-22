@@ -41,9 +41,14 @@ class AccountController < ApplicationController
     uri = URI.parse("https://api.weixin.qq.com/sns/jscode2session?appid=#{appid}&secret=#{secret}&js_code=#{code}&grant_type=authorization_code")
     response = Net::HTTP.get_response(uri)
     result = JSON.parse response.body
+    cv = CustomValue.find_by(customized_type: "Principal",custom_field_id:20,value:result["openid"])
     if result['openid'].present?
-      if CustomValue.find_by(customized_type: "Principal",custom_field_id:20,value:result["openid"]).present?
-        render :json => {"code" => 0, "openid" => result['openid'] } and return
+      if cv.present?
+        if User.find_by(id:cv.customized_id).try(:status) == 1
+          render :json => {"code" => 0, "openid" => result['openid'] } and return
+        else
+          render :json => {"code" => 3, "openid" => result['openid'] } and return
+        end
       else
         render :json => {"code" => 1, "openid" => result['openid']} and return
       end

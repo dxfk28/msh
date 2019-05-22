@@ -1,0 +1,18 @@
+<strong>时间:</strong><input type="date" name="time" id="values_closed_on_1" size="10" class="value date_value" value="">
+<div id="ajax_content">
+  <%= render :partial => 'region' %>
+</div>
+<script type="text/javascript">
+$("#values_closed_on_1").on("change",function (argument) {
+  var time_1 = $("#values_closed_on_1").val();
+  $.ajax({
+          type: "get",
+          dataType: "html",
+          url: '/region_html?time=' + time_1,
+          async: false,
+          success: function(data) {
+            $("#ajax_content").html(data)
+          }
+       });
+})
+</script>

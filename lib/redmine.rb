@@ -189,7 +189,8 @@ Redmine::MenuManager.map :top_menu do |menu|
   menu.push :home, :home_path
   menu.push :my_page, { :controller => 'my', :action => 'page' }, :if => Proc.new { User.current.logged? } 
   menu.push :projects, { :controller => 'projects', :action => 'index' }, :caption => :label_project_plural
-  menu.push :图表, { :controller => 'welcome', :action => 'msh' }, :if => Proc.new { User.current.logged? }
+  menu.push :科室流转率图表, { :controller => 'welcome', :action => 'msh' }, :if => Proc.new { User.current.logged? }
+  menu.push :区域流转率图表, { :controller => 'welcome', :action => 'region' }, :if => Proc.new { User.current.logged? }
   menu.push :administration, { :controller => 'admin', :action => 'index' }, :if => Proc.new { User.current.admin? }, :last => true
   # menu.push :help, Redmine::Info.help_url, :last => true
 end

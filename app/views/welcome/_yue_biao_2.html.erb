@@ -1,0 +1,73 @@
+<div id="container" style="height: 600px;"></div>
+<script type="text/javascript" src="/javascripts/echarts.js"></script>
+<script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+var yMax = 500;
+var data = <%= @count %>;
+var dataShadow = [];
+
+for (var i = 0; i < data.length; i++) {
+    dataShadow.push(yMax);
+}
+
+option = null;
+app.title = '坐标轴刻度与标签对齐';
+option = {
+    title: {
+        text: "SN:" + "<%= @issue.try(:subject) %>" + "," + "<%= @year.to_s%>" +"年各月流转率",
+        subtext: ''
+    },
+    color: ['#3398DB'],
+    toolbox: {
+        feature: {
+            saveAsImage:{}
+        }
+    },
+    tooltip : {
+        trigger: 'axis',
+        axisPointer : {
+            type : 'shadow'
+        },
+        formatter: '{b0}<br/>{a0}: {c0}%'
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis : [
+        {
+            type : 'category',
+            data : ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+            axisTick: {
+                alignWithLabel: true
+            }
+        }
+    ],
+    yAxis : [
+        {        
+            min: 0,
+            max: 1000,
+            interval: 50,
+            type : 'value',
+            axisLabel: { show: true, interval: 'auto', formatter: '{value}%' },
+        }
+    ],
+    series : [
+        {
+            name:'流转率',
+            type:'bar',
+            barWidth: '60%',
+            seriesLabel: { show: true, interval: 'auto', formatter: '{value}%' },
+            data:data
+        }
+    ]
+};
+;
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+</script>
