@@ -187,7 +187,7 @@ end
 
 Redmine::MenuManager.map :top_menu do |menu|
   menu.push :home, :home_path
-  menu.push :my_page, { :controller => 'my', :action => 'page' }, :if => Proc.new { User.current.logged? } 
+  # menu.push :my_page, { :controller => 'my', :action => 'page' }, :if => Proc.new { User.current.logged? } 
   menu.push :projects, { :controller => 'projects', :action => 'index' }, :caption => :label_project_plural
   menu.push :科室流转率图表, { :controller => 'welcome', :action => 'msh' }, :if => Proc.new { User.current.logged? }
   menu.push :区域流转率图表, { :controller => 'welcome', :action => 'region' }, :if => Proc.new { User.current.logged? }
@@ -229,20 +229,20 @@ Redmine::MenuManager.map :admin_menu do |menu|
             :html => {:class => 'icon icon-user'}
   menu.push :groups, {:controller => 'groups'}, :caption => :label_group_plural,
             :html => {:class => 'icon icon-group'}
-  menu.push :roles, {:controller => 'roles'}, :caption => :label_role_and_permissions,
-            :html => {:class => 'icon icon-roles'}
+  # menu.push :roles, {:controller => 'roles'}, :caption => :label_role_and_permissions,
+  #           :html => {:class => 'icon icon-roles'}
   menu.push :trackers, {:controller => 'trackers'}, :caption => :label_tracker_plural,
             :html => {:class => 'icon icon-issue'}
   menu.push :issue_statuses, {:controller => 'issue_statuses'}, :caption => :label_issue_status_plural,
             :html => {:class => 'icon icon-issue-edit'}
-  menu.push :workflows, {:controller => 'workflows', :action => 'edit'}, :caption => :label_workflow,
-            :html => {:class => 'icon icon-workflows'}
+  # menu.push :workflows, {:controller => 'workflows', :action => 'edit'}, :caption => :label_workflow,
+  #           :html => {:class => 'icon icon-workflows'}
   menu.push :custom_fields, {:controller => 'custom_fields'},  :caption => :label_custom_field_plural,
             :html => {:class => 'icon icon-custom-fields'}
-  menu.push :enumerations, {:controller => 'enumerations'},
-            :html => {:class => 'icon icon-list'}
-  menu.push :settings, {:controller => 'settings'},
-            :html => {:class => 'icon icon-settings'}
+  # menu.push :enumerations, {:controller => 'enumerations'},
+  #           :html => {:class => 'icon icon-list'}
+  # menu.push :settings, {:controller => 'settings'},
+  #           :html => {:class => 'icon icon-settings'}
   # menu.push :ldap_authentication, {:controller => 'auth_sources', :action => 'index'},
   #           :html => {:class => 'icon icon-server-authentication'}
   # menu.push :plugins, {:controller => 'admin', :action => 'plugins'}, :last => true,
