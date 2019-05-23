@@ -71,7 +71,7 @@ class WelcomeController < ApplicationController
     @ke = CustomField.find_by(id:29).possible_values.delete_if { |item| item=="-" }
     @count = []
     if params[:province].blank?
-      @province = "辽宁省"
+      @province = "辽宁"
     else
       @province = params[:province]
     end
@@ -97,7 +97,7 @@ class WelcomeController < ApplicationController
     @ke = CustomField.find_by(id:29).possible_values.delete_if { |item| item=="-" }
     @count = []
     if params[:province].blank?
-      @province = "辽宁省"
+      @province = "辽宁"
     else
       @province = params[:province]
     end

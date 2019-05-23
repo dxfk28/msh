@@ -43,7 +43,7 @@ option = {
     xAxis : [
         {
             type : 'category',
-            data :"<%= @users.pluck(:lastname) %>".replace(re, "").replace("["," ").replace("]","").split(","),
+            data :"<%= @users.map{|u| u.lastname + u.firstname} %>".replace(re, "").replace("["," ").replace("]","").split(","),
             axisLabel: {  
                 interval:0,
                 formatter:function(value){  
