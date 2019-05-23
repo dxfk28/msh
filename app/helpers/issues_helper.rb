@@ -311,10 +311,11 @@ module IssuesHelper
 
   def email_issue_attributes(issue, user, html)
     items = []
-    %w(author status priority assigned_to category fixed_version).each do |attribute|
+    # %w(author status priority assigned_to category fixed_version).each do |attribute|
+    %w(assigned_to).each do |attribute|
       unless issue.disabled_core_fields.include?(attribute+"_id")
         if html
-          items << content_tag('strong', "#{l("field_#{attribute}")}: ") + (issue.send attribute)
+          items << content_tag('strong',"设备负责人: ") + (issue.send attribute)
         else
           items << "#{l("field_#{attribute}")}: #{issue.send attribute}"
         end

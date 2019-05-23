@@ -152,6 +152,8 @@ class IssuesController < ApplicationController
       group_id = CustomValue.find_by(customized_type:'Principal',custom_field_id:24,value:params[:province]).try(:customized_id)
       place_record.area = Group.find_by(id:group_id).try(:lastname)
       if cv1.save && cv2.save && place_record.save && cv3.save && cv4.save && cv5.save
+        #位置信息更改成功以后发送邮件
+        # Mailer.deliver_issue_add(issue)
         render :json => {'code' => 0}
       else
         raise ActiveRecord::Rollback
