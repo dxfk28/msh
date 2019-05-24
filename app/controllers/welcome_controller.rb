@@ -118,7 +118,7 @@ class WelcomeController < ApplicationController
     @count = []
     @yue.each do |yue|
       count = @issue.place_records.where("created_at > ? and created_at < ?",Time.new(@year,yue,1),Time.new(@year,yue,31)).count
-      count = format("%.2f",count/Setting[:turnover_base].to_f*100).to_f
+      count = format("%.2f",count/CustomValue.find_by(customized_type:"Project",customized_id:1,custom_field_id:36).value.to_f*100).to_f
       @count << count
     end
   end
@@ -129,7 +129,7 @@ class WelcomeController < ApplicationController
     @count = []
     @yue.each do |yue|
       count = @issue.place_records.where("created_at > ? and created_at < ?",Time.new(@year,yue,1),Time.new(@year,yue,31)).count
-      count = format("%.2f",count/Setting[:turnover_base].to_f*100).to_f
+      count = format("%.2f",count/CustomValue.find_by(customized_type:"Project",customized_id:1,custom_field_id:36).value.to_f*100).to_f
       @count << count
     end
     render :partial => 'yue_biao_2', :layout => false

@@ -1,5 +1,5 @@
+api.code 0
 api.issue do
-  api.code 0
   api.id @issue.id
   api.project(:id => @issue.project_id, :name => @issue.project.name) unless @issue.project.nil?
   api.tracker(:id => @issue.tracker_id, :name => @issue.tracker.name) unless @issue.tracker.nil?

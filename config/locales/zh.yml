@@ -1071,6 +1071,7 @@ zh:
   label_gantt_progress_line: 进度线
   setting_jsonp_enabled: 启用JSONP支持
   field_inherit_members: 继承父部门分类成员
+  field_turnover_base: 月流转基数
   field_closed_on: 结束日期
   field_generate_password: 生成密码
   setting_default_projects_tracker_ids: 新建部门分类默认数据分类

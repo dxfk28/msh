@@ -4,13 +4,12 @@
 var dom = document.getElementById("container");
 var myChart = echarts.init(dom);
 var app = {};
-var yMax = 500;
 var data = <%= @count %>;
 var dataShadow = [];
 
-for (var i = 0; i < data.length; i++) {
-    dataShadow.push(yMax);
-}
+// for (var i = 0; i < data.length; i++) {
+//     dataShadow.push(yMax);
+// }
 
 option = null;
 app.title = '坐标轴刻度与标签对齐';
@@ -50,8 +49,8 @@ option = {
     yAxis : [
         {        
             min: 0,
-            max: 1000,
-            interval: 50,
+            max: 2000,
+            interval: 100,
             type : 'value',
             axisLabel: { show: true, interval: 'auto', formatter: '{value}%' },
         }
