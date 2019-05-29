@@ -59,7 +59,7 @@ class UsersController < ApplicationController
     user_id = CustomValue.find_by(customized_type:"Principal",value:openid,custom_field_id:20).try(:customized_id) 
     user = User.find_by(id:user_id)
     if user.present?
-      if password.present? && user.check_password?(password)
+      if password.present? && !user.check_password?(password)
         render :json => {'code' => 3, 'result' => '用户密码不正确'} and return
       end
       user.mail = mail if params[:mail].present?
