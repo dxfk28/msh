@@ -3,7 +3,11 @@
             <option value="<%= cf %>" <%= cf == @province ? 'selected' : '' %> ><%= cf %></option>
         <% end %>
 	 </select>
-<strong>时间:</strong><input type="date" name="time" id="values_closed_on_1" size="10" class="value date_value" value="">
+<strong>时间:</strong><input type="month" name="time" id="values_closed_on_1" size="10" class="" value="">
+<strong>流转类别:</strong><select name="category" class="category">
+            <option value="科室" <%= "科室" == @category ? 'selected' : '' %> >科室</option>
+            <option value="类别" <%= "类别" == @category ? 'selected' : '' %> >类别</option>
+	 </select>
 <div id="ajax_content">
 	<%= render :partial => 'ke' %>
 </div>
@@ -11,10 +15,11 @@
 $(".province").on("change",function (argument) {
 	var province = $(".province").val();
 	var time_1 = $("#values_closed_on_1").val();
+	var category = $(".category").val();
 	$.ajax({
 		      type: "get",
 		      dataType: "html",
-		      url: '/msh_html?province=' + province + "&time=" + time_1,
+		      url: '/msh_html?province=' + province + "&time=" + time_1 + "&category=" + category,
 		      async: false,
 		      success: function(data) {
 		      	$("#ajax_content").html(data)
@@ -24,10 +29,25 @@ $(".province").on("change",function (argument) {
 $("#values_closed_on_1").on("change",function (argument) {
 	var time_1 = $("#values_closed_on_1").val();
 	var province = $(".province").val();
+	var category = $(".category").val();
 	$.ajax({
 		      type: "get",
 		      dataType: "html",
-		      url: '/msh_html?province=' + province + "&time=" + time_1,
+		      url: '/msh_html?province=' + province + "&time=" + time_1 + "&category=" + category,
+		      async: false,
+		      success: function(data) {
+		      	$("#ajax_content").html(data)
+		      }
+	     });
+})
+$(".category").on("change",function (argument) {
+	var time_1 = $("#values_closed_on_1").val();
+	var province = $(".province").val();
+	var category = $(".category").val();
+	$.ajax({
+		      type: "get",
+		      dataType: "html",
+		      url: '/msh_html?province=' + province + "&time=" + time_1 + "&category=" + category,
 		      async: false,
 		      success: function(data) {
 		      	$("#ajax_content").html(data)

@@ -31,7 +31,7 @@ class WelcomeController < ApplicationController
     @year = Time.now().year
     @yue = Time.now().month
     @count = []
-    place_records = PlaceRecord.where("created_at > ? and created_at < ? ",Time.new(@year,@yue,1),Time.new(@year,@yue,31))
+    place_records = PlaceRecord.where("created_at > ? and created_at < ? and category = ? ",Time.new(@year,@yue,1),Time.new(@year,@yue,31),"本体")
     all_count = place_records.count
     @users = User.where(id:Issue.pluck(:assigned_to_id).uniq).order("lastname desc")
     @users.each do |user|
@@ -52,7 +52,7 @@ class WelcomeController < ApplicationController
     end
     
     @count = []
-    place_records = PlaceRecord.where("created_at > ? and created_at < ? ",Time.new(@year,@yue,1),Time.new(@year,@yue,31))
+    place_records = PlaceRecord.where("created_at > ? and created_at < ? ",Time.new(@year,@yue,1),Time.new(@year,@yue,31),"本体")
     all_count = place_records.count
     @users = User.where(id:Issue.pluck(:assigned_to_id).uniq).order("lastname desc")
     @users.each do |user|
@@ -69,18 +69,33 @@ class WelcomeController < ApplicationController
     @year = Time.now().year
     @yue = Time.now().month
     @ke = CustomField.find_by(id:29).possible_values.delete_if { |item| item=="-" }
+    @lei = CustomField.where(id:(31..35)).pluck(:name)
     @count = []
     if params[:province].blank?
       @province = "辽宁"
     else
       @province = params[:province]
     end
-    all_count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department in (?) ",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,@ke).count
-    @ke.each do |ke|
-      count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department = ?",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,ke).count
-      count = count/all_count.to_f*100
-      count = format("%.2f",count).to_f
-      @count << count
+    all_count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department in (?) and category = ? ",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,@ke,"本体").count
+    if params[:category].blank?
+      @category = "类别"
+      @xname = @lei
+      @lei.each do |lei|
+        names = CustomField.find_by(name:lei).possible_values.delete_if { |item| item=="-" }
+        count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department in (?) and category = ? ",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,names,"本体").count
+        count = count/all_count.to_f*100
+        count = format("%.2f",count).to_f
+        @count << count
+      end
+    else
+      @category  = params[:category]
+      @xname = @ke
+      @ke.each do |ke|
+        count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department = ? and category = ? ",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,ke,"本体").count
+        count = count/all_count.to_f*100
+        count = format("%.2f",count).to_f
+        @count << count
+      end
     end
   end
 
@@ -93,20 +108,34 @@ class WelcomeController < ApplicationController
       @yue = Time.now().month
       @time = Time.now().to_date.to_s
     end
-    
     @ke = CustomField.find_by(id:29).possible_values.delete_if { |item| item=="-" }
+    @lei = CustomField.where(id:(31..35)).pluck(:name)
     @count = []
     if params[:province].blank?
       @province = "辽宁"
     else
       @province = params[:province]
     end
-    all_count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department in (?) ",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,@ke).count
-    @ke.each do |ke|
-      count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department = ?",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,ke).count
-      count = count/all_count.to_f*100
-      count = format("%.2f",count).to_f
-      @count << count
+    all_count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department in (?) and category = ?",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,@ke,"本体").count
+    if params[:category] == "类别"
+      @category = "类别"
+      @xname = @lei
+      @lei.each do |lei|
+        names = CustomField.find_by(name:lei).possible_values.delete_if { |item| item=="-" }
+        count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department in (?) and category = ?",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,names,"本体").count
+        count = count/all_count.to_f*100
+        count = format("%.2f",count).to_f
+        @count << count
+      end
+    else
+      @category  = params[:category]
+      @xname = @ke
+      @ke.each do |ke|
+        count = PlaceRecord.where("created_at > ? and created_at < ? and province = ? and department = ? and category = ?",Time.new(@year,@yue,1),Time.new(@year,@yue,31),@province,ke,"本体").count
+        count = count/all_count.to_f*100
+        count = format("%.2f",count).to_f
+        @count << count
+      end
     end
     render :partial => 'ke', :layout => false
   end

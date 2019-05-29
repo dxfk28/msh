@@ -102,7 +102,13 @@ end %>
 <hr />
 <div id="issue_tree">
 <% if  @issue.place_records.present? %>
-    <p><strong style="color: blue;cursor:pointer;" class="show" title="点击查看具体内容"><%='位置变更记录'%></strong><span style="float: right;">当月流转率:<% count = @issue.place_records.where("created_at > ? and created_at < ?",Time.now.beginning_of_month,Time.now.end_of_month).count%><%= format("%.2f",count/CustomValue.find_by(customized_type:"Project",customized_id:1,custom_field_id:36).value.to_f*100) + '%' %></span></p>
+    <p><strong style="color: blue;cursor:pointer;" class="show" title="点击查看具体内容"><%='位置变更记录'%></strong>
+      <span style="float: right;">
+      当月流转次数 :<%= @issue.place_records.where("created_at > ? and created_at < ?",Time.now.beginning_of_month,Time.now.end_of_month).count%>
+      <%# count = @issue.place_records.where("created_at > ? and created_at < ?",Time.now.beginning_of_month,Time.now.end_of_month).count%>
+      <%#= format("%.2f",count/CustomValue.find_by(customized_type:"Project",customized_id:1,custom_field_id:36).value.to_f*100) + '%' %>
+      </span>
+    </p>
     <table style="width: 100%; display: none;" class="lvli">
       <thead>
         <tr>
@@ -134,11 +140,13 @@ end %>
 <% end %>
 </div>
 <% end %>
-<hr />
-<p><strong><%='设备信息二维码'%></strong></p>
-<% qr = RQRCode::QRCode.new( @issue.subject, :size => 4, :level => :h ) %>
-<% @qrcode_str = Base64.encode64( qr.to_img.resize(400,400).to_s ) %>
-<img src="data:image/png;base64,<%= @qrcode_str -%>" style='width: 80px;' />
+<% if User.current.admin? %>
+  <hr />
+  <p><strong><%='设备信息二维码'%></strong></p>
+  <% qr = RQRCode::QRCode.new( @issue.subject, :size => 4, :level => :h ) %>
+  <% @qrcode_str = Base64.encode64( qr.to_img.resize(400,400).to_s ) %>
+  <img src="data:image/png;base64,<%= @qrcode_str -%>" style='width: 80px;' />
+<% end %>
 <% if @relations.present? || User.current.allowed_to?(:manage_issue_relations, @project) %>
 <hr />
 <% end %>

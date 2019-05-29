@@ -149,6 +149,7 @@ class IssuesController < ApplicationController
       place_record.province = params[:province]
       place_record.city = params[:city]
       place_record.department = params[:department]
+      place_record.category = params[:equipmentSort]
       group_id = CustomValue.find_by(customized_type:'Principal',custom_field_id:24,value:params[:province]).try(:customized_id)
       place_record.area = Group.find_by(id:group_id).try(:lastname)
       if cv1.save && cv2.save && place_record.save && cv3.save && cv4.save && cv5.save
