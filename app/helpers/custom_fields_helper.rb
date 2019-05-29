@@ -160,7 +160,7 @@ module CustomFieldsHelper
         attrs.merge!(:multiple => true) if custom_value.custom_field.multiple?
         if custom_value.custom_field_id == 30
           user = User.find_by(id:custom_value.value)
-          attrs.merge!(:user_name => user.try(:lastname) + user.try(:firstname))
+          attrs.merge!(:user_name => user.try(:lastname).to_s + user.try(:firstname).to_s)
         end
         api.custom_field attrs do
           if custom_value.value.is_a?(Array)
