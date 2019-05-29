@@ -50,10 +50,25 @@ class UsersController < ApplicationController
   def change_user_information
     openid = params[:openid]
     mail = params[:mail]
+    login = params[:login]
+    firstname = params[:firstname]
+    lastname = params[:lastname]
+    password = params[:password]
+    new_password = params[:new_password]
+    password_confirmation = params[:password_confirmation]
     user_id = CustomValue.find_by(customized_type:"Principal",value:openid,custom_field_id:20).try(:customized_id) 
     user = User.find_by(id:user_id)
     if user.present?
-      user.mail = mail
+      if password.present? && user.check_password?(password)
+        render :json => {'code' => 3, 'result' => '用户密码不正确'} and return
+      end
+      user.mail = mail if params[:mail].present?
+      user.login = login if params[:login].present?
+      user.firstname = firstname if params[:firstname].present?
+      user.lastname = lastname if params[:lastname].present?
+      if params[:password].present? && new_password.present? && new_password == password_confirmation
+        user.password = password
+      end
       if user.save
         render :json => {'code' => 0}
       else
