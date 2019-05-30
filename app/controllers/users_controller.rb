@@ -67,7 +67,7 @@ class UsersController < ApplicationController
       user.firstname = firstname if params[:firstname].present?
       user.lastname = lastname if params[:lastname].present?
       if params[:password].present? && new_password.present? && new_password == password_confirmation
-        user.password = password
+        user.password = new_password
       end
       if user.save
         render :json => {'code' => 0}
