@@ -1,10 +1,31 @@
-<strong>时间:</strong><input type="date" name="time" id="values_closed_on_1" size="10" class="value date_value" value="">
+<script src="/javascripts/bootstrap-datetimepicker.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/bootstrap-datetimepicker.zh-CN.js"></script>
+<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.min.css">
+<style type="text/css">
+  h1 {
+    margin-top: 0px;
+  }
+</style>
+<strong>时间:</strong>
+<input type="text" name="time" id="datetimepicker" size="10" class="" value="" autocomplete="off" >
 <div id="ajax_content">
   <%= render :partial => 'region' %>
 </div>
 <script type="text/javascript">
-$("#values_closed_on_1").on("change",function (argument) {
-  var time_1 = $("#values_closed_on_1").val();
+$("#datetimepicker").datetimepicker({
+    bootcssVer: 3,
+    format: 'yyyy-mm',
+    autoclose: true,
+    todayBtn: false,
+    startView: 'year',
+    minView:'year',
+    maxView:'decade',
+    language:  'zh-CN'
+});
+$("#datetimepicker").on("change",function (argument) {
+  var time_1 = $("#datetimepicker").val();
   $.ajax({
           type: "get",
           dataType: "html",

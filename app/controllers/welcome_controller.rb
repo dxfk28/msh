@@ -50,9 +50,8 @@ class WelcomeController < ApplicationController
       @year = Time.now().year
       @yue = Time.now().month
     end
-    
     @count = []
-    place_records = PlaceRecord.where("created_at > ? and created_at < ? ",Time.new(@year,@yue,1),Time.new(@year,@yue,31),"本体")
+    place_records = PlaceRecord.where("created_at > ? and created_at < ? and category = ? ",Time.new(@year,@yue,1),Time.new(@year,@yue,31),"本体")
     all_count = place_records.count
     @users = User.where(id:Issue.pluck(:assigned_to_id).uniq).order("lastname desc")
     @users.each do |user|

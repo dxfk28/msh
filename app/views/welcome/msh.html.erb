@@ -1,20 +1,41 @@
+<script src="/javascripts/bootstrap-datetimepicker.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/bootstrap-datetimepicker.zh-CN.js"></script>
+<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.min.css">
+<style type="text/css">
+	h1 {
+		margin-top: 0px;
+	}
+</style>
 <strong>省份:</strong><select name="province" class="province">
         <% CustomField.find_by(id:28).possible_values.delete_if { |item| item=="-" }.each do |cf|%>
             <option value="<%= cf %>" <%= cf == @province ? 'selected' : '' %> ><%= cf %></option>
         <% end %>
 	 </select>
-<strong>时间:</strong><input type="month" name="time" id="values_closed_on_1" size="10" class="" value="">
+<strong>时间:</strong>
+<input type="text" name="time" id="datetimepicker" size="10" class="" value="" autocomplete="off" >
 <strong>流转类别:</strong><select name="category" class="category">
-            <option value="科室" <%= "科室" == @category ? 'selected' : '' %> >科室</option>
-            <option value="类别" <%= "类别" == @category ? 'selected' : '' %> >类别</option>
+            <option value="科室" <%= "科室" == @category ? 'selected' : '' %> >科室名称</option>
+            <option value="类别" <%= "类别" == @category ? 'selected' : '' %> >科室类别</option>
 	 </select>
 <div id="ajax_content">
 	<%= render :partial => 'ke' %>
 </div>
 <script type="text/javascript">
+$("#datetimepicker").datetimepicker({
+	bootcssVer: 3,
+	format: 'yyyy-mm',
+    autoclose: true,
+    todayBtn: false,
+    startView: 'year',
+    minView:'year',
+    maxView:'decade',
+    language:  'zh-CN'
+});
 $(".province").on("change",function (argument) {
 	var province = $(".province").val();
-	var time_1 = $("#values_closed_on_1").val();
+	var time_1 =  $("#datetimepicker").val();
 	var category = $(".category").val();
 	$.ajax({
 		      type: "get",
@@ -26,8 +47,8 @@ $(".province").on("change",function (argument) {
 		      }
 	     });
 })
-$("#values_closed_on_1").on("change",function (argument) {
-	var time_1 = $("#values_closed_on_1").val();
+$("#datetimepicker").on("change",function (argument) {
+	var time_1 = $("#datetimepicker").val();
 	var province = $(".province").val();
 	var category = $(".category").val();
 	$.ajax({
@@ -41,7 +62,7 @@ $("#values_closed_on_1").on("change",function (argument) {
 	     });
 })
 $(".category").on("change",function (argument) {
-	var time_1 = $("#values_closed_on_1").val();
+	var time_1 =  $("#datetimepicker").val();
 	var province = $(".province").val();
 	var category = $(".category").val();
 	$.ajax({
