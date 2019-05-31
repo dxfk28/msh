@@ -4,5 +4,5 @@
 <%#= watcher_link(@issue, User.current) %>
 <%#= link_to l(:button_copy), project_copy_issue_path(@project, @issue), :class => 'icon icon-copy' if User.current.allowed_to?(:copy_issues, @project) && Issue.allowed_target_projects.any? %>
 <%= link_to l(:button_delete), issue_path(@issue), :data => {:confirm => issues_destroy_confirmation_message(@issue)}, :method => :delete, :class => 'icon icon-del' if @issue.deletable? %>
-<%#= link_to '流转率', yue_biao_path(issue_id:@issue.id),:class => 'icon icon-copy' %>
+<%= link_to '流转率', yue_biao_path(issue_id:@issue.id),:class => 'icon icon-copy' %>
 </div>
