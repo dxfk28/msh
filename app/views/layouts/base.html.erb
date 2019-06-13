@@ -118,13 +118,17 @@
 
 <div id="ajax-indicator" style="display:none;"><span><%= l(:label_loading) %></span></div>
 <div id="ajax-modal" style="display:none;"></div>
+<script type="text/javascript">
+    $("#wrapper3").css("min-height",document.documentElement.clientHeight - 80 + "px")
+</script>
+<div id="footer">
+  <div class="bgl">
+    <div class="bgc" style="text-align: center;">
+    柯尼卡美能达医疗印刷器材(上海)有限公司&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;沪ICP备19019479号
+    </div>
+  </div>
+</div>
 
-<<!-- div id="footer">
-
-  <div class="bgl"><div class="bgr">
-    Powered by <%#= link_to Redmine::Info.app_name, Redmine::Info.url %> &copy; 2006-2019 Jean-Philippe Lang
-  </div></div>
-</div> -->
 </div>
 </div>
 <%= call_hook :view_layouts_base_body_bottom %>

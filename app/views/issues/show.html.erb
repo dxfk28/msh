@@ -126,7 +126,7 @@ end %>
     <% for place_record in @issue.place_records.order("created_at desc") -%>
       <tr>
         <td style="width: 10%;text-align: left;"><%= place_record.created_at.to_date%></td>
-        <td style="width: 10%;text-align: left;"><%= place_record.user.try(:lastname)%></td>
+        <td style="width: 10%;text-align: left;"><%= place_record.user.try(:lastname) + place_record.user.try(:firstname)%></td>
         <td style="width: 23%;text-align: left;"><%= place_record.form%></td>
         <td style="width: 23%;text-align: left;"><%= place_record.to%></td>
         <td style="width: 10%;text-align: left;"><%= place_record.area%></td>
