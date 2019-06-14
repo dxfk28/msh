@@ -144,6 +144,9 @@ class IssuesController < ApplicationController
       cv4.value = user.lastname + user.firstname if user.present?
       cv6 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:16)
       cv6.value = Time.now().to_date
+      cv7 = CustomValue.find_or_create_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:38)
+      code_user = User.find_by(id: CustomValue.find_by(customized_type:"Principal",custom_field_id:20,value:params[:openid]).customized_id) if params[:openid].present?
+      cv7.value = code_user.lastname + code_user.firstname if code_user.present?
       place_record = PlaceRecord.new()
       place_record.user_id = params[:user_id]
       place_record.issue_id = issue.id
@@ -155,7 +158,7 @@ class IssuesController < ApplicationController
       place_record.category = params[:equipmentSort]
       group_id = CustomValue.find_by(customized_type:'Principal',custom_field_id:24,value:params[:province]).try(:customized_id)
       place_record.area = Group.find_by(id:group_id).try(:lastname)
-      if cv1.save && cv2.save && place_record.save && cv3.save && cv4.save && cv5.save && cv6.save
+      if cv1.save && cv2.save && place_record.save && cv3.save && cv4.save && cv5.save && cv6.save && cv7.save
         #位置信息更改成功以后发送邮件
         # Mailer.deliver_issue_add(issue)
         render :json => {'code' => 0}
