@@ -143,7 +143,7 @@ end %>
 <% if User.current.admin? %>
   <hr />
   <p><strong><%='设备信息二维码'%></strong></p>
-  <% qr = RQRCode::QRCode.new( @issue.subject, :size => 4, :level => :h ) %>
+  <% qr = RQRCode::QRCode.new( "SN:" + @issue.subject, :size => 4, :level => :h ) %>
   <% @qrcode_str = Base64.encode64( qr.to_img.resize(400,400).to_s ) %>
   <img src="data:image/png;base64,<%= @qrcode_str -%>" style='width: 80px;' />
 <% end %>
