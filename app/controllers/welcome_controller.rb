@@ -35,7 +35,7 @@ class WelcomeController < ApplicationController
     all_count = place_records.count
     @users = User.where(id:Issue.pluck(:assigned_to_id).uniq).order("lastname desc")
     @users.each do |user|
-      count = place_records.joins(:issue).where(issues: { assigned_to_id: user.id}).count
+      count = place_records.where(province:CustomValue.where(customized_type:"Principal",customized_id:user.id,custom_field_id:22).pluck(:value)).count
       count = count/all_count.to_f*100
       count = format("%.2f",count).to_f
       @count << count
@@ -55,11 +55,11 @@ class WelcomeController < ApplicationController
     all_count = place_records.count
     @users = User.where(id:Issue.pluck(:assigned_to_id).uniq).order("lastname desc")
     @users.each do |user|
-      count = place_records.joins(:issue).where(issues: { assigned_to_id: user.id}).count
+      count = place_records.where(province:CustomValue.where(customized_type:"Principal",customized_id:user.id,custom_field_id:22).pluck(:value)).count
       count = count/all_count.to_f*100
       count = format("%.2f",count).to_f
       @count << count
-    end
+     end
     render :partial => 'region', :layout => false
   end
 
