@@ -158,9 +158,10 @@ class IssuesController < ApplicationController
       place_record.category = params[:equipmentSort]
       group_id = CustomValue.find_by(customized_type:'Principal',custom_field_id:24,value:params[:province]).try(:customized_id)
       place_record.area = Group.find_by(id:group_id).try(:lastname)
+      previou_place_record = issue.place_records.order("id desc").first
       if cv1.save && cv2.save && place_record.save && cv3.save && cv4.save && cv5.save && cv6.save && cv7.save
         #位置信息更改成功以后发送邮件
-        # Mailer.deliver_issue_add(issue)
+        Mailer.deliver_issue_add(issue,previou_place_record)
         render :json => {'code' => 0}
       else
         raise ActiveRecord::Rollback

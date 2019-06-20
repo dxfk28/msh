@@ -1,6 +1,6 @@
 <!-- <h1><%#= link_to("#{issue.tracker.name} ##{issue.id}: #{issue.subject}", issue_url) %></h1> -->
-<h2><%= "变更前地址:" + issue.place_records.last.form.to_s %></h2>
-<h2><%= "变更后地址:" + issue.place_records.last.to.to_s %></h2>
+<h2><%= "变更前地址:" + issue.place_records.last.try(:form).to_s %></h2>
+<h2><%= "变更后地址:" + issue.place_records.last.try(:to).to_s %></h2>
 <h2><%= "设备基本信息:" %></h2>
 <%= render_email_issue_attributes(issue, user, true) %>
 

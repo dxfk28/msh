@@ -77,7 +77,7 @@ class Mailer < ActionMailer::Base
     @issue = issue
     @user = user
     @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue)
-    mail :to => user,
+    mail :to => @user,
       :subject => '位置变更' + "[#{issue.project.name} - #{issue.tracker.name}] #{issue.subject}"
   end
 
@@ -85,15 +85,16 @@ class Mailer < ActionMailer::Base
   #
   # Example:
   #   Mailer.deliver_issue_add(issue)
-  def self.deliver_issue_add(issue)
+  def self.deliver_issue_add(issue,previou_place_record)
     # users = issue.notified_users | issue.notified_watchers
     # users.each do |user|
     #   issue_add(user, issue).deliver_later
     # end
 
     users = []
-    users << User.find_by(id:issue.assigned_to_id)
-    users << User.find_by(id:CustomValue.find_by(customized_type:"Issue",customized_id:issue.id,custom_field_id:30).value)
+    users << User.find_by(id:issue.assigned_to_id) if previou_place_record.blank? && issue.assigned_to_id.present?
+    users << issue.place_records.order('id desc').first.user if issue.place_records.present?
+    users << previou_place_record.user if previou_place_record.present?
     users.each do |user|
       issue_add(user, issue).deliver_later
     end
