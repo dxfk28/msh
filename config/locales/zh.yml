@@ -246,7 +246,7 @@ zh:
   field_is_closed: 已关闭的设备
   field_is_default: 默认值
   field_tracker: 跟踪
-  field_subject: 主题
+  field_subject: SN号
   field_due_date: 计划完成日期
   field_assigned_to: 设备负责人
   field_priority: 优先级
