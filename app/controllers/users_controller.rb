@@ -41,7 +41,7 @@ class UsersController < ApplicationController
     user_ids = CustomValue.where(customized_type: "Principal",value:params[:province],custom_field_id:22).pluck(:customized_id)
     users = User.where(id:user_ids)
     if users.present?
-      render :json => {'code' => 0, 'result' => users.map{|u| ['name' => u.lastname + u.firstname,'id' =>u.id]} }
+      render :json => {'code' => 0, 'result' => users.map{|u| ['name' => u.lastname + u.firstname,'id' =>u.id] }.flatten }
     else
       render :json => {'code' => 1, 'result' => '没有找到用户' }
     end

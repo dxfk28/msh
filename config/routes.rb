@@ -65,6 +65,8 @@ Rails.application.routes.draw do
   get 'projects/:id/issues/report', :to => 'reports#issue_report', :as => 'project_issues_report'
   get 'projects/:id/issues/report/:detail', :to => 'reports#issue_report_details', :as => 'project_issues_report_details'
 
+  post 'issues/delete_place_record', :to => 'issues#delete_place_record'
+
   get   '/issues/imports/new', :to => 'imports#new', :as => 'new_issues_import'
   post  '/imports', :to => 'imports#create', :as => 'imports'
   get   '/imports/:id', :to => 'imports#show', :as => 'import'

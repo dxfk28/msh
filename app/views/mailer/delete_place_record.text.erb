@@ -1,0 +1,12 @@
+<p>设备名称:<%=CustomValue.find_by(customized_type: "Issue",customized_id: @issue.id,custom_field_id:5).value%></p>
+<p>设备SN号:<%=@issue.subject%></p>
+<p>记录删除详细:</p>
+<p>变更时间:<%= @place_record.created_at.to_date%></p>
+<p>变更后责任人:<%= @place_record.user.try(:lastname) + @place_record.user.try(:firstname)%></p>
+<p>变更前地址:<%= @place_record.form%></p>
+<p>变更后地址:<%= @place_record.to%></p>
+<p>大区:<%= @place_record.area%></p>
+<p>省:<%= @place_record.province%></p>
+<p>市:<%= @place_record.city%></p>
+<p>科室:<%= @place_record.department%></p>
+<p>方式:<%= @place_record.mode%></p>

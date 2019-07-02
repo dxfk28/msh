@@ -66,7 +66,7 @@ class Mailer < ActionMailer::Base
   end
 
   # Builds a mail for notifying user about a new issue
-  def issue_add(user, issue)
+  def fuze_issue_add(user, issue,previou_place_record)
     redmine_headers 'Project' => issue.project.identifier,
                     'Issue-Id' => issue.id,
                     'Issue-Author' => issue.author.login
@@ -75,28 +75,74 @@ class Mailer < ActionMailer::Base
     references issue
     @author = issue.author
     @issue = issue
-    @user = user
+    @previou_place_record = previou_place_record
+    @user = User.find_by(id:5)
+    @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue)
+    mail :to => @user,
+      :subject => '位置变更' + "[#{issue.project.name} - #{issue.tracker.name}] #{issue.subject}"
+  end
+  # Notifies users about a new issue.
+  #
+  # Example:
+  #   Mailer.deliver_issue_add(issue)
+  def self.deliver_fuze_issue_add(issue,previou_place_record)
+    # users = issue.notified_users | issue.notified_watchers
+    # users.each do |user|
+    #   issue_add(user, issue).deliver_later
+    # end
+    users = []
+    users << issue.assigned_to if issue.assigned_to.present?
+    if users.present?
+      users.each do |user|
+        fuze_issue_add(user, issue,previou_place_record).deliver
+      end
+    end
+  end
+
+  def issue_add(user, issue,previou_place_record)
+    redmine_headers 'Project' => issue.project.identifier,
+                    'Issue-Id' => issue.id,
+                    'Issue-Author' => issue.author.login
+    redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
+    message_id issue
+    references issue
+    @author = issue.author
+    @issue = issue
+    @previou_place_record = previou_place_record
+    @user = User.find_by(id:5)
     @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue)
     mail :to => @user,
       :subject => '位置变更' + "[#{issue.project.name} - #{issue.tracker.name}] #{issue.subject}"
   end
 
-  # Notifies users about a new issue.
-  #
-  # Example:
-  #   Mailer.deliver_issue_add(issue)
   def self.deliver_issue_add(issue,previou_place_record)
-    # users = issue.notified_users | issue.notified_watchers
-    # users.each do |user|
-    #   issue_add(user, issue).deliver_later
-    # end
 
     users = []
-    users << User.find_by(id:issue.assigned_to_id) if previou_place_record.blank? && issue.assigned_to_id.present?
     users << issue.place_records.order('id desc').first.user if issue.place_records.present?
-    users << previou_place_record.user if previou_place_record.present?
+    users << previou_place_record.user if previou_place_record.present? && ( previou_place_record.user != issue.place_records.order('id desc').first.user) 
     users.each do |user|
-      issue_add(user, issue).deliver_later
+      issue_add(user, issue,previou_place_record).deliver
+    end
+  end
+
+  def delete_place_record(user,issue,place_record)
+    redmine_headers 'Project' => issue.project.identifier,
+                    'Issue-Id' => issue.id,
+                    'Issue-Author' => issue.author.login
+    redmine_headers 'Issue-Assignee' => issue.assigned_to.login if issue.assigned_to
+    message_id issue
+    references issue
+    @author = issue.author
+    @issue = issue
+    @place_record = place_record
+    @user = user
+    mail :to => @user,
+      :subject => 'MSH设备位置变更记录删除'
+  end
+
+  def self.deliver_delete_place_record(issue,place_record)
+    User.where(admin:true).each do |user|
+      delete_place_record(user, issue,place_record).deliver
     end
   end
 

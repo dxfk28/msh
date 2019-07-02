@@ -15,7 +15,7 @@ option = null;
 app.title = '坐标轴刻度与标签对齐';
 option = {
     title: {
-        text: "SN:" + "<%= @issue.try(:subject) %>" + "," + "<%= @year.to_s%>" +"年各月流转率",
+        text: "<%= CustomValue.find_by(custom_field_id:5,customized_id:@issue.id,customized_type: "Issue").try(:value) %>/" + "SN:" + "<%= @issue.try(:subject) %>" + "," + "<%= @year.to_s%>" +"年各月流转率",
         subtext: ''
     },
     color: ['#3398DB'],

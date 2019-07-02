@@ -20,7 +20,7 @@ class IssuesController < ApplicationController
 
   before_action :find_issue, :only => [:show, :edit, :update]
   before_action :find_issues, :only => [:bulk_edit, :bulk_update, :destroy]
-  before_action :authorize, :except => [:index, :new, :create,:find_issue_for_sn,:update_place,:yue_biao]
+  before_action :authorize, :except => [:index, :new, :create,:find_issue_for_sn,:update_place,:yue_biao,:delete_place_record]
   before_action :find_optional_project, :only => [:index, :new, :create]
   before_action :build_new_issue_from_params, :only => [:new, :create]
   accept_rss_auth :index, :show
@@ -128,6 +128,24 @@ class IssuesController < ApplicationController
     end
   end
 
+  def delete_place_record
+    place_record = PlaceRecord.find_by(id:params[:place_record_id])
+    issue = Issue.find_by(id:params[:issue_id])
+    if place_record.blank?
+      flash[:notice] = "删除失败"
+      redirect_to issue_path(issue)
+    else
+      if place_record.destroy
+        Mailer.deliver_delete_place_record(issue,place_record)
+        flash[:notice] = "删除成功"
+        redirect_to issue_path(issue)
+      else
+        flash[:notice] = "删除失败"
+        redirect_to issue_path(issue)
+      end
+    end
+  end
+
   def update_place
     CustomValue.transaction do
       issue = Issue.find_by(id:params[:issue_id])
@@ -149,6 +167,9 @@ class IssuesController < ApplicationController
       cv7.value = code_user.lastname + code_user.firstname if code_user.present?
       place_record = PlaceRecord.new()
       place_record.user_id = params[:user_id]
+      if User.find_by(id:params[:user_id]).blank?
+        render :json => {'code' => 1, 'message' => "无效的用户"} and return
+      end
       place_record.issue_id = issue.id
       place_record.form = params[:form]
       place_record.to = params[:to]
@@ -156,12 +177,14 @@ class IssuesController < ApplicationController
       place_record.city = params[:city]
       place_record.department = params[:department]
       place_record.category = params[:equipmentSort]
+      place_record.mode = params[:mode]
       group_id = CustomValue.find_by(customized_type:'Principal',custom_field_id:24,value:params[:province]).try(:customized_id)
       place_record.area = Group.find_by(id:group_id).try(:lastname)
       previou_place_record = issue.place_records.order("id desc").first
       if cv1.save && cv2.save && place_record.save && cv3.save && cv4.save && cv5.save && cv6.save && cv7.save
         #位置信息更改成功以后发送邮件
         Mailer.deliver_issue_add(issue,previou_place_record)
+        Mailer.deliver_fuze_issue_add(issue,previou_place_record)
         render :json => {'code' => 0}
       else
         raise ActiveRecord::Rollback

@@ -1,0 +1,6 @@
+<p>您管理的设备,设备名称:<%= CustomValue.find_by(customized_type: "Issue",customized_id: @issue.id,custom_field_id: 5).try(:value) %>. 设备SN号:<%= @issue.subject%></p>
+<% if @previou_place_record.present? %>
+	<p>设备责任人由:<%= @previou_place_record.user.try(:lastname) + @previou_place_record.user.try(:firstname) %>,变为:<%= @issue.place_records.order('id desc').first.user.try(:lastname) + @issue.place_records.order('id desc').first.user.try(:firstname) %></p>
+<% else %>
+	<p>设备责任人由:<%= @issue.assigned_to.try(:lastname) + @issue.assigned_to.try(:firstname) %>,变为:<%= @issue.place_records.order('id desc').first.user.try(:lastname) + @issue.place_records.order('id desc').first.user.try(:firstname) %></p>
+<% end %>

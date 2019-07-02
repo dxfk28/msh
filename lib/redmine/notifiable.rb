@@ -21,6 +21,8 @@ module Redmine
       notifications << Notifiable.new('message_posted')
       notifications << Notifiable.new('wiki_content_added')
       notifications << Notifiable.new('wiki_content_updated')
+      notifications << Notifiable.new('delete_place_record')
+      notifications << Notifiable.new('fuze_issue_add')
       notifications
     end
   end
