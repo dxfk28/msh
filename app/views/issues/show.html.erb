@@ -101,7 +101,7 @@ end %>
 <% if !@issue.leaf? || User.current.allowed_to?(:manage_subtasks, @project) %>
 <hr />
 <div id="issue_tree">
-<% if  @issue.place_records.present? || 1%>
+<% if  @issue.place_records.present?%>
     <p><strong style="color: blue;cursor:pointer;" class="show" title="点击查看具体内容"><%='位置变更记录'%></strong>
       <span style="float: right;">
       当月流转次数 :<%= @issue.place_records.where("created_at > ? and created_at < ?",Time.now.beginning_of_month,Time.now.end_of_month).count%>

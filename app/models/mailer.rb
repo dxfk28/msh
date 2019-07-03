@@ -76,7 +76,7 @@ class Mailer < ActionMailer::Base
     @author = issue.author
     @issue = issue
     @previou_place_record = previou_place_record
-    @user = User.find_by(id:5)
+    @user = user
     @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue)
     mail :to => @user,
       :subject => '位置变更' + "[#{issue.project.name} - #{issue.tracker.name}] #{issue.subject}"
@@ -109,7 +109,7 @@ class Mailer < ActionMailer::Base
     @author = issue.author
     @issue = issue
     @previou_place_record = previou_place_record
-    @user = User.find_by(id:5)
+    @user = user
     @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue)
     mail :to => @user,
       :subject => '位置变更' + "[#{issue.project.name} - #{issue.tracker.name}] #{issue.subject}"
